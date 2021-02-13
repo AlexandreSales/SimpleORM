@@ -52,9 +52,8 @@ begin
     .TableName(aClassName)
     .Where(aWhere);
 
-  aSQL := aSQL + 'DELETE FROM ' + aClassName;
-  aSQL := aSQL + ' WHERE ' + aWhere;
-
+  aSQL := aSQL + 'delete from ' + aClassName;
+  aSQL := aSQL + ' where ' + aWhere;
 end;
 
 destructor TSimpleSQL<T>.Destroy;
@@ -75,7 +74,7 @@ begin
   FGroupBy := aSQL;
 end;
 
-function TSimpleSQL<T>.Insert(var aSQL: String): iSimpleSQL<T>;
+function TSimpleSQL<T>.Insert(var aSQL : String): iSimpleSQL<T>;
 var
   aClassName, aFields, aParam : String;
 begin
@@ -86,9 +85,11 @@ begin
       .FieldsInsert(aFields)
       .Param(aParam);
 
-    aSQL := aSQL + 'INSERT INTO ' + aClassName;
-    aSQL := aSQL + ' (' + aFields + ') ';
-    aSQL := aSQL + ' VALUES (' + aParam + ');';
+    aSQL := aSQL + 'insert into ' + aClassName;
+    aSQL := aSQL + '    (' + aFields + ') ';
+    aSQL := aSQL + ' values ';
+    aSQL := aSQL + '    (' + aParam + ');';
+    aSQL := aSQL + ' select last_insert_id() as id'
 end;
 
 function TSimpleSQL<T>.Join(aSQL: String): iSimpleSQL<T>;
@@ -119,24 +120,23 @@ begin
     .TableName(aClassName);
 
   if FFields <> '' then
-    aSQL := aSQL + ' SELECT ' + FFields
+    aSQL := aSQL + ' select ' + FFields
   else
-    aSQL := aSQL + ' SELECT ' + aFields;
+    aSQL := aSQL + ' select ' + aFields;
 
-  aSQL := aSQL + ' FROM ' + aClassName;
+  aSQL := aSQL + ' from ' + aClassName;
 
   if FJoin <> '' then
     aSQL := aSQL + ' ' + FJoin + ' ';
 
   if FWhere <> '' then
-    aSQL := aSQL + ' WHERE ' + FWhere;
+    aSQL := aSQL + ' where ' + FWhere;
 
   if FGroupBy <> '' then
-    aSQL := aSQL + ' GROUP BY ' + FGroupBy;  
+    aSQL := aSQL + ' group by ' + FGroupBy;
 
   if FOrderBy <> '' then
-    aSQL := aSQL + ' ORDER BY ' + FOrderBy;
-
+    aSQL := aSQL + ' order by ' + FOrderBy;
 end;
 
 function TSimpleSQL<T>.SelectId(var aSQL: String): iSimpleSQL<T>;
@@ -150,11 +150,11 @@ begin
     .TableName(aClassName)
     .Where(aWhere);
   if FWhere <> '' then
-    aSQL := aSQL + ' WHERE ' + FWhere;
+    aSQL := aSQL + ' where ' + FWhere;
 
-  aSQL := aSQL + ' SELECT ' + aFields;
-  aSQL := aSQL + ' FROM ' + aClassName;
-  aSQL := aSQL + ' WHERE ' + aWhere;
+  aSQL := aSQL + ' select ' + aFields;
+  aSQL := aSQL + ' from ' + aClassName;
+  aSQL := aSQL + ' where ' + aWhere;
 end;
 
 function TSimpleSQL<T>.Update(var aSQL: String): iSimpleSQL<T>;
@@ -168,9 +168,9 @@ begin
     .Update(aUpdate)
     .Where(aWhere);
 
-  aSQL := aSQL + 'UPDATE ' + ClassName;
-  aSQL := aSQL + ' SET ' + aUpdate;
-  aSQL := aSQL + ' WHERE ' + aWhere;
+  aSQL := aSQL + 'update ' + ClassName;
+  aSQL := aSQL + ' set ' + aUpdate;
+  aSQL := aSQL + ' where ' + aWhere;
 
 end;
 

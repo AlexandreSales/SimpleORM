@@ -239,9 +239,8 @@ begin
   FQuery.SQL.Clear;
   FQuery.SQL.Add(aSQL);
   Self.FillParameter(aValue);
-  FQuery.ExecSQL;
+  FQuery.Open;
 end;
-
 
 class function TSimpleDAO<T>.New(aQuery : iSimpleQuery): iSimpleDAO<T>;
 begin
@@ -259,7 +258,6 @@ begin
       .BindClassToForm(FForm, FList[FDataSource.DataSet.RecNo-1]);
     {$ENDIF}
   end;
-
 end;
 
 function TSimpleDAO<T>.SQL: iSimpleDAOSQLAttribute<T>;
